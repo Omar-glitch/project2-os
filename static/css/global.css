@@ -1,0 +1,33 @@
+*, ::before, ::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  --primary: #2E8CF3;
+  --primary-o9: rgba(46, 140, 243, 0.9);
+  --primary-o8: rgba(46, 140, 243, 0.8);
+  --primary-o7: rgba(46, 140, 243, 0.7);
+  --primary-o6: rgba(46, 140, 243, 0.6);
+  --primary-o5: rgba(46, 140, 243, 0.5);
+  --primary-o4: rgba(46, 140, 243, 0.4);
+  --primary-o3: rgba(46, 140, 243, 0.3);
+  --primary-o2: rgba(46, 140, 243, 0.2);
+  --primary-o1: rgba(46, 140, 243, 0.1);
+  --primary-o05: rgba(46, 140, 243, 0.05);
+  --light: #FAFAFA;
+  --dark: #4C4C4C;
+  background: var(--light);
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+h1::selection {
+  background-color: var(--dark);
+}

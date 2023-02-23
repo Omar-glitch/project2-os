@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block header %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', path='css/index.css') }}">
+{% endblock %}
+{% block title %}
+  Main menu
+{% endblock %}
+{% block content %}
+<div class="bubble" style="--d: 0.1s"></div>
+<div class="bubble" style="--d: 0.2s"></div>
+<div class="bubble" style="--d: 0.3s"></div>
+<div class="bubble" style="--d: 0.4s"></div>
+<form method="post" id="form">
+  <h1>Cargar algoritmo</h1>
+  <label for="file" id="label_file">
+    <input accept=".xlsx, .xls" type="file" id="file" name="file">
+    <svg viewBox="0 0 122.88 88.98" fill="currentColor" style="enable-background:new 0 0 122.88 88.98" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M85.33,16.83c12.99-9.83,31.92,1.63,31.92,13.63c0,7.75-2.97,10.79-7.57,14.03 c23.2,12.41,12.7,39.86-7.54,44.49l-70.69,0c-33.2,0-45.48-44.99-10.13-55.89C14.69,6.66,66.5-17.2,85.33,16.83L85.33,16.83z M53.37,69.54V53.66H39.16l22.29-26.82l22.29,26.82H69.53v15.88H53.37L53.37,69.54z"></path></g></svg>
+    <div class="description">
+      <p id="label_description">Ingrese o arrastre su archivo</p>
+    </div>
+  </label>
+  <button id="sendButton" title="Enviar">Enviar</button>
+</form>
+<div id="portal"></div>
+<script src="{{ url_for('static', path='js/main.js') }}"></script>
+{% endblock %}

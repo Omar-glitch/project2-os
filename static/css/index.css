@@ -1,0 +1,165 @@
+
+input[type='file'] {
+  display: none;
+}
+
+h1 {
+  font-weight: 900;
+}
+
+.bubble {
+  position: absolute;
+  background-color: var(--primary);
+  opacity: .08;
+  border-radius: 50%;
+  width: 6.25rem;
+  height: 6.25rem;
+  animation: bubbles 10s infinite linear;
+  animation-delay: var(--d);
+  z-index: -1;
+}
+
+.bubble:nth-child(1) {top: 6.25rem; right: 8%;}
+
+.bubble:nth-child(2) {
+  top: -0.625rem;
+  left: -6.25rem;
+  width: 12.5rem;
+  height: 12.5rem;
+}
+
+.bubble:nth-child(3) {
+  bottom: 3.125rem;
+  right: 10%;
+  width: 18.75rem;
+  height: 18.75rem;
+}
+
+.bubble:nth-child(4) {
+  bottom: 15%;
+  left: 15%;
+  width: 12.5rem;
+  height: 12.5rem;
+}
+
+@keyframes bubbles {
+  0%, 100% {transform: translate3d(20px, 20px, 0px);} 
+  25% {transform: translate3d(0px, 40px, 0px);} 
+  50% {transform: translate3d(-20px, 20px, 0px);} 
+  75% {transform: translate3d(-20px, 20px, 0px);}
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  width: 25rem;
+  height: 100vh;
+  margin: auto;
+}
+
+#label_file {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 600;
+  margin: 1.6rem 0;
+  width: 100%;
+  padding: 12% 8%;
+  border-radius: 0.75rem;
+  border: 0.25rem dashed currentColor;
+  transition: padding .2s, filter .2s, color .2s, border .2s;
+}
+
+#label_file:hover {
+  color: var(--dark);
+  cursor: pointer;
+}
+
+#label_file > ::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: currentColor;
+  opacity: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  transition: opacity .2s;
+}
+
+
+#label_file:hover > ::before {
+  opacity: .04;
+}
+
+#label_file > svg {
+  width: 5rem;
+  height: 5rem;
+}
+
+button {
+  background-color: var(--primary);
+  color: var(--light);
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.4rem;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  transition: color .2s, background-color .2s, padding .2s;
+  font-weight: 600;
+}
+
+button:is(:hover, :focus) {
+  color: var(--light);
+  background-color: var(--dark);
+  cursor: pointer;
+  padding: 0.5rem 2rem;
+}
+
+.description {
+  max-width: 20rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.description p {
+  text-overflow: ellipsis;
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: grid;
+  place-items: center;
+}
+
+.modal-container {
+  background: var(--light);
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  min-width: 17.5rem;
+  max-width: 20rem;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0.625rem 1.5rem rgba(0, 0, 0, .12);
+}
+
+.modal-container > p {
+  margin: 1.125rem 0;
+}
+
+.error {color: red;}
+.sucess {color: var(--primary);}
+
