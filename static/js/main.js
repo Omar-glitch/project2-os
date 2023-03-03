@@ -14,8 +14,18 @@
     portal.innerHTML = `
       <div class='modal'>
         <div class='modal-container ${hasBeenAnError ? 'error' : 'sucess'}'>
-          <h2>${hasBeenAnError ? 'ERROR' : 'Información'}</h2>
-          <p>${hasBeenAnError ? error : data}</p>
+          <h2>${hasBeenAnError ? 'ERROR' : data['algorithm']}</h2>
+          <div class='modal-message'>
+            ${error ? `<p>${error}</p>`
+              : `
+              <div>
+                <b>Rendimiento:</b><p> ${data['performance']}</p>
+              </div>
+              <div>
+                <b>Frecuencia:</b><p> ${data['frequency']}</p>
+              </div>
+            `}
+          </div>
           <button style='${hasBeenAnError && '--primary: red; --dark: red;'}'>Ok</button>
         </div>
       </div> 
@@ -57,9 +67,9 @@
         loading = false;
         sendButton.disabled = false;
         sendButton.innerText = 'Enviar';
-        inputFile.files = new DataTransfer().files;
-        filename = undefined;
-        description.innerText = 'Ingrese o arrastre su archivo';
+        // inputFile.files = new DataTransfer().files;
+        // filename = undefined;
+        // description.innerText = 'Ingrese o arrastre su archivo';
       })
   })
   

@@ -156,8 +156,18 @@ button:is(:hover, :focus) {
   box-shadow: 0 0.625rem 1.5rem rgba(0, 0, 0, .12);
 }
 
-.modal-container > p {
-  margin: 1.125rem 0;
+.modal-container > h2 {margin-bottom: 1rem;}
+.modal-container > button {margin-top: 1rem;}
+
+.modal-message {
+  display: flex;
+  width: 85%;
+  flex-direction: column;
+}
+
+.modal-message > div {
+  display: flex;
+  justify-content: space-between;
 }
 
 .error {color: red;}

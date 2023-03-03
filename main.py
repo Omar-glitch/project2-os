@@ -5,8 +5,9 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from settings import Settings
 from io import BytesIO
-import openpyxl
+from openpyxl import load_workbook
 from zipfile import BadZipFile
+from utils import optimum
 
 settings = Settings()
 app = FastAPI()
@@ -20,12 +21,19 @@ async def home(request : Request):
 @app.post('/')
 async def get_type(file : UploadFile):
   try:
-    openpyxl.load_workbook(BytesIO(await file.read()), data_only=True)
-    return JSONResponse({'data': 'Este es un archivo excel.'}, 200)
+    sheet = load_workbook(BytesIO(await file.read()), data_only=True).active
+    title, references, fails = optimum(sheet)
+
+    return JSONResponse({'data': {
+      'algorithm': title,
+      'performance': f'{((1 - (fails / references)) * 100):.2f}%',
+      'frequency': fails
+    }}, 200)
   except BadZipFile:
     return JSONResponse({'error': 'Este no es un archivo excel válido.'}, 400)
+  except AssertionError as e:
+    return JSONResponse({'error': str(e)}, 400)
   except Exception as e:
-    print(type(e).__name__)
     return JSONResponse({'error': 'Este archivo no es válido.'}, 400)
 
 @app.on_event('startup')
