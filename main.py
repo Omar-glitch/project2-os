@@ -7,7 +7,7 @@ from settings import Settings
 from io import BytesIO
 from openpyxl import load_workbook
 from zipfile import BadZipFile
-from utils import optimum
+from utils import optimum, fifo, not_recently_used
 
 settings = Settings()
 app = FastAPI()
@@ -22,7 +22,14 @@ async def home(request : Request):
 async def get_type(file : UploadFile):
   try:
     sheet = load_workbook(BytesIO(await file.read()), data_only=True).active
-    title, references, fails = optimum(sheet)
+    algorithms = [optimum, not_recently_used, fifo]
+    
+    for algorithm in algorithms:
+      try: 
+        title, references, fails = algorithm(sheet)
+        break
+      except AssertionError:
+        print('pasando')
 
     return JSONResponse({'data': {
       'algorithm': title,
