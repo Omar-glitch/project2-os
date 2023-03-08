@@ -158,6 +158,7 @@ button:is(:hover, :focus) {
 
 .modal-container > h2 {margin-bottom: 1rem;}
 .modal-container > button {margin-top: 1rem;}
+.modal-message > div {margin: 0.125rem 0;}
 
 .modal-message {
   display: flex;

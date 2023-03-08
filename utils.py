@@ -1,16 +1,35 @@
 from openpyxl.worksheet.worksheet import Worksheet
 
+MAX_COLUMNS = 41
+MIN_COLUMNS = 6
+MAX_ROWS = 6
+MIN_ROWS = 4
+
+class InvalidTable(Exception):
+  "Raised when size in table are not correct"
+
+  def __init__(self, message='El tamaño de la tabla es incorrecto.'):
+    self.message = message
+    super().__init__(self.message)
+
+
 def optimum(sheet : Worksheet):
   rows, columns = sheet.max_row, sheet.max_column
   last_process = sheet.cell(column=columns, row = 1).value
   frames, fails, lasted = rows - 2, 0, 0
   previous_row = [None]
 
+  if columns < MIN_COLUMNS: raise InvalidTable(f'El tamaño de la tabla es muy pequeña')
+  if columns > MAX_COLUMNS: raise InvalidTable(f'El tamaño máximo de la tabla es {MAX_COLUMNS} columnas')
+  if rows < MIN_ROWS: raise InvalidTable(f'Tamaño minimo de marcos son {MIN_ROWS}.')
+  if rows > MAX_ROWS: raise InvalidTable(f'Tamaño máximo de marcos es {MAX_ROWS}.')
+
   for cols in sheet.iter_cols(min_col = 2, max_col = columns, max_row = rows):
     row = []
     for cell in cols:
       if cell.row == 1:
-        new_value = cell.value
+        if (new_value := cell.value) == None:
+          raise InvalidTable('La sintaxis de la tabla en el archivo no es válida.')
 
       if 1 < cell.row < rows:
         row.append(cell.value)

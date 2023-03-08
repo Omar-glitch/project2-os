@@ -24,6 +24,12 @@
               <div>
                 <b>Frecuencia:</b><p> ${data['frequency']}</p>
               </div>
+              <div>
+                <b>Fallos:</b><p> ${data['fails']}</p>
+              </div>
+              <div>
+                <b>Referencias:</b><p> ${data['references']}</p>
+              </div>
             `}
           </div>
           <button style='${hasBeenAnError && '--primary: red; --dark: red;'}'>Ok</button>
@@ -67,9 +73,9 @@
         loading = false;
         sendButton.disabled = false;
         sendButton.innerText = 'Enviar';
-        // inputFile.files = new DataTransfer().files;
-        // filename = undefined;
-        // description.innerText = 'Ingrese o arrastre su archivo';
+        inputFile.files = new DataTransfer().files;
+        filename = undefined;
+        description.innerText = 'Ingrese o arrastre su archivo';
       })
   })
   

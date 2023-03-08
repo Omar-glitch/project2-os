@@ -7,7 +7,7 @@ from settings import Settings
 from io import BytesIO
 from openpyxl import load_workbook
 from zipfile import BadZipFile
-from utils import optimum, fifo, not_recently_used
+from utils import optimum, fifo, not_recently_used, InvalidTable
 
 settings = Settings()
 app = FastAPI()
@@ -29,19 +29,23 @@ async def get_type(file : UploadFile):
         title, references, fails = algorithm(sheet)
         break
       except AssertionError:
-        print('pasando')
+        print('passing algorithm...')
 
     return JSONResponse({'data': {
       'algorithm': title,
       'performance': f'{((1 - (fails / references)) * 100):.2f}%',
-      'frequency': fails
+      'frequency': f'{(fails / references):.2f}',
+      'fails': fails,
+      'references': references
     }}, 200)
+  except InvalidTable as e:
+    return JSONResponse({'error': str(e)})
   except BadZipFile:
     return JSONResponse({'error': 'Este no es un archivo excel válido.'}, 400)
   except AssertionError as e:
     return JSONResponse({'error': str(e)}, 400)
   except Exception as e:
-    return JSONResponse({'error': 'Este archivo no es válido.'}, 400)
+    return JSONResponse({'error': 'Algoritmo no encontrado.'}, 400)
 
 @app.on_event('startup')
 async def startup():
