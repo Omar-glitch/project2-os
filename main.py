@@ -7,7 +7,7 @@ from settings import Settings
 from io import BytesIO
 from openpyxl import load_workbook
 from zipfile import BadZipFile
-from utils import optimum, fifo, not_recently_used, InvalidTable
+from utils import optimum, fifo, not_recently_used, second_chance, clock, InvalidTable
 
 settings = Settings()
 app = FastAPI()
@@ -22,7 +22,7 @@ async def home(request : Request):
 async def get_type(file : UploadFile):
   try:
     sheet = load_workbook(BytesIO(await file.read()), data_only=True).active
-    algorithms = [optimum, not_recently_used, fifo]
+    algorithms = [optimum, fifo, not_recently_used, second_chance, clock]
     
     for algorithm in algorithms:
       try: 
@@ -45,7 +45,7 @@ async def get_type(file : UploadFile):
   except AssertionError as e:
     return JSONResponse({'error': str(e)}, 400)
   except Exception as e:
-    return JSONResponse({'error': 'Algoritmo no encontrado.'}, 400)
+    return JSONResponse({'error': 'Algoritmo no encontrado o mal escrito.'}, 400)
 
 @app.on_event('startup')
 async def startup():

@@ -47,6 +47,9 @@ def optimum(sheet : Worksheet):
         assert previous_row[lasted % frames] != row[lasted % frames], 'Este no es el algoritmo optimo'
         lasted += 1
     previous_row = row
+  
+  if fails == 0:
+    raise InvalidTable('La sintaxis de la tabla en el archivo no es válida')
 
   return 'Optimo', columns - 1, fails
       
@@ -108,3 +111,79 @@ def not_recently_used(sheet : Worksheet):
 
   return 'No usadas recientemente', columns - 1, fails
   
+
+def second_chance(sheet : Worksheet):
+  rows, columns = sheet.max_row, sheet.max_column
+  frames, fails, lasted = rows - 2, 0, 0
+  previous_row, bits = [None], [0] * frames
+
+  for cols in sheet.iter_cols(min_col = 2, max_col = columns, max_row = rows):
+    row = []
+    for cell in cols:
+      if cell.row == 1:
+        new_value = cell.value
+
+      if 1 < cell.row < rows:
+        row.append(cell.value)
+
+      if cell.row == rows:
+        if cell.value is not None:
+          fails += 1
+
+    if new_value not in previous_row:
+      if None not in previous_row:
+        i = lasted
+        while True:
+          if bits[i % frames] == 0:
+            break
+          else:
+            bits[i % frames] = 0
+          i += 1
+
+        if new_value == row[lasted % frames]:
+          lasted += 1
+        else:
+          assert row[i % frames] == new_value, 'Este no es segunda oportunidad'
+    else:
+      bits[previous_row.index(new_value)] = 1
+    
+    previous_row = row
+
+  return 'Segunda oportunidad', columns - 1, fails
+
+def clock(sheet : Worksheet):
+  rows, columns = sheet.max_row, sheet.max_column
+  frames, fails, lasted = rows - 2, 0, 0
+  previous_row, bits = [None], [0] * frames
+
+  for cols in sheet.iter_cols(min_col = 2, max_col = columns, max_row = rows):
+    row = []
+    for cell in cols:
+      if cell.row == 1:
+        new_value = cell.value
+
+      if 1 < cell.row < rows:
+        row.append(cell.value)
+
+      if cell.row == rows:
+        if cell.value is not None:
+          fails += 1
+
+    if new_value not in previous_row:
+      if None not in previous_row:
+        i = lasted
+        while True:
+          if bits[i % frames] == 0:
+            break
+          else:
+            bits[i % frames] = 0
+          i += 1
+
+        lasted = i + 1
+        assert row[i % frames] == new_value, 'Este no es reloj mejorado'
+
+    else:
+      bits[previous_row.index(new_value)] = 1
+    previous_row = row
+
+  return 'Reloj mejorado', columns - 1, fails
