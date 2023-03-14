@@ -16,7 +16,8 @@ class InvalidTable(Exception):
 def optimum(sheet : Worksheet):
   rows, columns = sheet.max_row, sheet.max_column
   last_process = sheet.cell(column=columns, row = 1).value
-  frames, fails, lasted = rows - 2, 0, 0
+  last_used = []
+  fails = 0
   previous_row = [None]
 
   if columns < MIN_COLUMNS: raise InvalidTable(f'El tamaño de la tabla es muy pequeña')
@@ -30,6 +31,8 @@ def optimum(sheet : Worksheet):
       if cell.row == 1:
         if (new_value := cell.value) == None:
           raise InvalidTable('La sintaxis de la tabla en el archivo no es válida.')
+        if new_value not in last_used:
+          last_used.append(new_value)
 
       if 1 < cell.row < rows:
         row.append(cell.value)
@@ -41,11 +44,10 @@ def optimum(sheet : Worksheet):
     if new_value not in previous_row:
       try:
         if None not in previous_row:
-          if previous_row.index(last_process) != row.index(new_value): 
-            assert False, 'Este no es el algoritmo optimo'
+          assert previous_row.index(last_process) == row.index(new_value), 'Este no es el algoritmo optimo'
+          last_used.pop(last_used.index(last_process))
       except ValueError:
-        assert previous_row[lasted % frames] != row[lasted % frames], 'Este no es el algoritmo optimo'
-        lasted += 1
+        assert previous_row.index(last_used.pop(0)) == row.index(new_value), "Este no es el algoritmo no se que"
     previous_row = row
   
   if fails == 0:
